@@ -10,7 +10,7 @@ clock = pygame.time.Clock()
 pygame.init()  # initiates pygame
 
 #CHANGETEXT
-# caption shit
+# caption shit 
 captionlistfilepath = 'titlelist'
 
 
