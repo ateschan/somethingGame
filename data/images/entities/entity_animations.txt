@@ -1,0 +1,11 @@
+player/crouch/ 3;1 
+player/idle/ 70;7;7;7;70;7 loop
+player/run/ 7;7 loop
+player/crouchgetup/ 7;7 loop
+player/jump/ 20;1 loop
+player2/crouch/ 3;1 
+player2/idle/ 70;7;7;7;70;7 loop
+player2/run/ 7;7 loop
+player2/crouchgetup/ 7;7 loop
+fireball/idle/ 1 loop
+p2fireball/idle/ 1 loop
