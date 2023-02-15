@@ -1,9 +1,5 @@
 from pygame.locals import *
-import pygame
-import sys
-import math
-import os
-import subprocess
+import pygame, sys, math, os, subprocess
 from random import randint
 import engine as e  # this is the engine.py file
 clock = pygame.time.Clock()
@@ -78,7 +74,6 @@ def clip(surf, x, y, x_size, y_size):
     image = surf.subsurface(handle_surf.get_clip())
     return image.copy()                                                     
 
-
 class Font():
     def __init__(self, path):
         self.spacing = 1
@@ -150,6 +145,7 @@ while (main_menu == True):
     # stores the (x,y) coordinates into
     # the variable as a tuple
     mouse = pygame.mouse.get_pos()
+    
     # if mouse is hovered on a button it
     # changes to lighter shade
     if WINDOW_SIZEX/2 - 90 <= mouse[0] <= WINDOW_SIZEX/2+104 and WINDOW_SIZEY/2 <= mouse[1] <= WINDOW_SIZEY/2+82:
@@ -558,10 +554,6 @@ while ((gameloop == True) or (try_again == True)):  # GENREAL GAME LOOP
             e.entity(player.x - 4, player.y - 12, 16, 9, 'fireball', False))
         P1fireballTimer -= 1
 
-    # if (player.ismelee == False):
-    #     for entity in P1fireball_list:
-    #          P1fireball_list.remove(entity)
-
     # Running checck flip animation
     if (player_movement[0] > 0) and (player.isjumping == False) and (player.air_timer == 0) and (player.cancrouch == False):
         player.set_action('run')
@@ -655,7 +647,6 @@ while ((gameloop == True) or (try_again == True)):  # GENREAL GAME LOOP
     for entity in P1fireball_list:
         entity.change_frame(1)
         entity.display(display, scroll)
-
 
     for entity in P2fireball_list:
         entity.change_frame(1)
