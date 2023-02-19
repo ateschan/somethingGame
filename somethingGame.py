@@ -1,5 +1,5 @@
 from pygame.locals import *
-import pygame, sys, math, os, subprocess
+import pygame, sys, math, os, subprocess, random
 from random import randint
 import engine as e  # this is the engine.py file
 clock = pygame.time.Clock()
@@ -8,7 +8,6 @@ pygame.init()  # initiates pygame
 #CHANGETEXT
 # caption shit 
 captionlistfilepath = 'titlelist'
-
 
 def load_captionlist(captionlistfilepath):
     titlelistcount = -1 
@@ -56,7 +55,8 @@ def load_map(path):
 
 # Loading map, filepaths for animations
 e.load_animations('data/images/entities/')
-game_map = load_map('map')
+game_map = load_map('data\maps\map')
+game_map1 = load_map('data\maps\map1')
 grass_img = pygame.image.load('data/images/grass.png')
 dirt_img = pygame.image.load('data/images/dirt.png')
 jumper_img = pygame.image.load('data/images/jumppad.png')
@@ -111,6 +111,12 @@ class Font():
             else:
                 x_offset += self.space_width + self.spacing
 
+def circle_surf(radius, color):
+    surf = pygame.Surface((radius * 2, radius * 2))
+    pygame.draw.circle(surf, color, (radius, radius), radius)
+    surf.set_colorkey((0, 0, 0))
+    return surf
+
 
 my_font = Font('data/images/small_font.png')
 my_big_font = Font('data/images/large_font.png')
@@ -119,6 +125,8 @@ player = e.entity(400, 100, 16, 15, 'player', False)
 player2 = e.entity(700, 100, 16, 15, 'player2', True)
 player_movement = [0,0]
 player2_movement = [0,0]
+P1Fballparticles = []
+P2Fballparticles = []
 
 while (main_menu == True):
 
@@ -226,8 +234,13 @@ def render_HUD():
     # HUD
     my_big_font.render(display, (str(player2.score) + " " +
                        str(player.score)), (rendx/2 - 12, 5))
-    my_big_font.render(display, (str(P1fireballTimer)), (rendx/2 - 40, 20))
-    my_big_font.render(display, (str(P2fireballTimer)), (rendx/2 + 15, 20))
+    pygame.draw.rect(display, (112, 0, 0), [rendx/2 - 120, 20, 1 * P1fireballTimer - 10, 10])
+    pygame.draw.rect(display, (0, 0, 112), [rendx/2 + 24, 20, 1 * P2fireballTimer - 10, 10])#outer rects
+    
+    pygame.draw.rect(display, (102, 0, 0), [rendx/2 - 120, 15, 1 * P1fireballTimer - 10, 10])#innet rects
+    pygame.draw.rect(display, (0, 0, 102), [rendx/2 + 24, 15, 1 * P2fireballTimer - 10, 10])
+    #my_big_font.render(display, ("PWR" + str(P1fireballTimer)), (rendx/2 - 40, 20))
+    #my_big_font.render(display, ("PWR" + str(P2fireballTimer)), (rendx/2 + 15, 20))
 
 def redrawGameWindow():
     render_HUD()
@@ -310,6 +323,7 @@ while ((gameloop == True) or (try_again == True)):  # GENREAL GAME LOOP
     midpointy = (player.y + player2.y)/2
     zoomx = 0
     zoomy = 0
+    
     # FUCKING ANNOYING CAMERA SCROLLING
     true_scroll[0] += (midpointx - true_scroll[0] - rendx/2)/18
     true_scroll[1] += (midpointy - true_scroll[1] - rendy/2)/18
@@ -453,6 +467,14 @@ while ((gameloop == True) or (try_again == True)):  # GENREAL GAME LOOP
             player2.set_pos(400, 100)
             player2.vertical_momentum = 0
             player.score += 1
+            
+        for fball in P1fireball_list:
+            if entity.collision_test(fball.obj.rect):
+                P1fireball_list.remove(fball)
+                
+        for fball in P2fireball_list:
+            if entity.collision_test(fball.obj.rect):
+                P2fireball_list.remove(fball)
 
     # General Player Collision
 
@@ -481,9 +503,10 @@ while ((gameloop == True) or (try_again == True)):  # GENREAL GAME LOOP
     
     #FIREBALL LENGTH
     #Player collision fo the fireball entity
-    #now trying to add trail lines to the end of the projectiles
     for entity in P1fireball_list:
-        pygame.draw.aaline(display, (255, 50, 50), (player.x - scroll[0] + 5, player.y - scroll[1] + 5), (entity.obj.x - scroll[0] , entity.obj.y - scroll[1] + 5),)
+        pygame.draw.aaline(display, (180, 50, 50), (player.x - scroll[0] + 5, player.y - scroll[1] + 5), (entity.obj.x - scroll[0] , entity.obj.y - scroll[1] + 5))
+        P1Fballparticles.append([[entity.obj.x - scroll[0] + 2, entity.obj.y - scroll[1] + 5], [random.randint(0, 20) / 10 - 1, -1], random.randint(4, 10)])
+        
         if player2.collision_test(entity.obj.rect):
             
             player2.tripleJumpCount = 0
@@ -504,6 +527,7 @@ while ((gameloop == True) or (try_again == True)):  # GENREAL GAME LOOP
     
     for entity in P2fireball_list:
         pygame.draw.aaline(display, (120, 50, 120), (player2.x - scroll[0] + 5, player2.y - scroll[1] + 5), (entity.obj.x - scroll[0] , entity.obj.y - scroll[1] + 5))
+        P2Fballparticles.append([[entity.obj.x - scroll[0], entity.obj.y - scroll[1] + 5], [random.randint(0, 20) / 10 - 1, -1], random.randint(4, 10)])
         if player.collision_test(entity.obj.rect):
             player.tripleJumpCount = 0
             if (entity.flip == True):
@@ -518,6 +542,35 @@ while ((gameloop == True) or (try_again == True)):  # GENREAL GAME LOOP
         for entity in P2fireball_list:
             P2fireball_list.remove(entity)
             P2fireballTimer -= 1
+            
+    # PARTICLE EFFECTS ##############################################################
+    for particle in P1Fballparticles:
+        particle[0][0] += particle[1][0]
+        particle[0][1] += particle[1][1]
+        particle[2] -= 0.1
+        particle[1][1] += 0.15
+        pygame.draw.circle(display, (255, 100, 100), [int(particle[0][0]), int(particle[0][1])], int(particle[2]))
+
+        radius = particle[2] * 2
+        display.blit(circle_surf(radius, (80, 20, 60)), (int(particle[0][0] - radius), int(particle[0][1] - radius)), special_flags=BLEND_RGB_ADD)
+
+        if particle[2] <= 0:
+            P1Fballparticles.remove(particle)
+    
+    for particle in P2Fballparticles:
+        particle[0][0] += particle[1][0]
+        particle[0][1] += particle[1][1]
+        particle[2] -= 0.1
+        particle[1][1] += 0.15
+        pygame.draw.circle(display, (100, 100, 255), [int(particle[0][0]), int(particle[0][1])], int(particle[2]))
+
+        radius = particle[2] * 2
+        display.blit(circle_surf(radius, (60, 20, 80)), (int(particle[0][0] - radius), int(particle[0][1] - radius)), special_flags=BLEND_RGB_ADD)
+
+        if particle[2] <= 0:
+            P2Fballparticles.remove(particle)
+            
+    
     # PLAYER 1 ANIMATION CHECKS########################################################
 
     if (player_movement[0] == 0) and (player.cancrouch == False) and (player.isjumping == False):
@@ -533,28 +586,28 @@ while ((gameloop == True) or (try_again == True)):  # GENREAL GAME LOOP
 
     if (player_movement[0] > 0) and (player.ismelee == True) and (P1fireballTimer != 0):
         P1fireball_list.append(
-            e.entity(player.x - 4, player.y - 12, 16, 9, 'fireball', False))
+            e.entity(player.x - 4, player.y - 10, 16, 9, 'fireball', False))
 
         P1fireballTimer -= 1
         player.set_flip(False)
 
     if (player_movement[0] < 0) and (player.ismelee == True) and (P1fireballTimer != 0):
         P1fireball_list.append(
-            e.entity(player.x - 5, player.y - 12, 16, 9, 'fireball', True))
+            e.entity(player.x - 5, player.y - 10, 16, 9, 'fireball', True))
         P1fireballTimer -= 1
         player.set_flip(True)
 
     if (player_movement[0] == 0) and (player.ismelee == True) and (player.flip == True) and (P1fireballTimer != 0):
         P1fireball_list.append(
-            e.entity(player.x - 5, player.y - 12, 16, 9, 'fireball', True))
+            e.entity(player.x - 5, player.y - 10, 16, 9, 'fireball', True))
         P1fireballTimer -= 1
 
     if (player_movement[0] == 0) and (player.ismelee == True) and (player.flip == False) and (P1fireballTimer != 0):
         P1fireball_list.append(
-            e.entity(player.x - 4, player.y - 12, 16, 9, 'fireball', False))
+            e.entity(player.x - 4, player.y - 10, 16, 9, 'fireball', False))
         P1fireballTimer -= 1
 
-    # Running checck flip animation
+    # Running check flip animation
     if (player_movement[0] > 0) and (player.isjumping == False) and (player.air_timer == 0) and (player.cancrouch == False):
         player.set_action('run')
         player.set_flip(False)
@@ -727,7 +780,6 @@ while ((gameloop == True) or (try_again == True)):  # GENREAL GAME LOOP
                 player.set_action('crouchgetup')
 
             # PLAYER 2#############################################
-            player2.ismelee = False
                 
             if event.key == K_RALT:
                 player2.set_action('idle')
