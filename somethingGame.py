@@ -128,52 +128,6 @@ player2_movement = [0,0]
 P1Fballparticles = []
 P2Fballparticles = []
 
-while (main_menu == True):
-
-    for ev in pygame.event.get():
-
-        if ev.type == pygame.QUIT:
-            pygame.quit()
-
-        # checks if a mouse is clicked
-        if ev.type == pygame.MOUSEBUTTONDOWN:
-
-            # if the mouse is clicked on the
-            # button the game is run
-            if WINDOW_SIZEX/2 - 90 <= mouse[0] <= WINDOW_SIZEX/2+104 and WINDOW_SIZEY/2 <= mouse[1] <= WINDOW_SIZEY/2+82:
-                gameloop = True
-                main_menu = False
-        if ev.type == pygame.KEYDOWN:
-            gameloop = True
-            main_menu = False
-
-    # fills the screen with a color
-    display.fill((60, 25, 60))
-
-    # stores the (x,y) coordinates into
-    # the variable as a tuple
-    mouse = pygame.mouse.get_pos()
-    
-    # if mouse is hovered on a button it
-    # changes to lighter shade
-    if WINDOW_SIZEX/2 - 90 <= mouse[0] <= WINDOW_SIZEX/2+104 and WINDOW_SIZEY/2 <= mouse[1] <= WINDOW_SIZEY/2+82:
-        pygame.draw.rect(display, (70, 35, 70), [
-                         rendx/2 - 28, rendy/2 + 7, 63, 20])
-
-    else:
-        pygame.draw.rect(display, (50, 15, 50), [
-                         rendx/2 - 28, rendy/2 + 7, 62, 20])
-
-    # superimposing the text onto our button
-    my_font.render(display, 'Any key to start', (rendx/2 - 150, 60))
-    my_big_font.render(display, 'Python Demo', (rendx/2 - 150, 40))
-    my_big_font.render(display, 'Start', (rendx/2 - 13, 141))
-
-    # updates the frames of the game
-    screen.blit(pygame.transform.scale(
-        display, (WINDOW_SIZEX, WINDOW_SIZEY)), (0, 0))
-
-    pygame.display.update()
 class jumper_obj():
     def __init__(self, type, loc):
         self.loc = loc
@@ -184,8 +138,7 @@ class jumper_obj():
             display.blit(
                 jumper_img, (self.loc[0] - scroll[0], self.loc[1] - scroll[1]))
         if (self.type == 'ground'):
-            display.blit(
-                jumper_ground, (self.loc[0] - scroll[0], self.loc[1] - scroll[1]))
+            display.blit(jumper_ground, (self.loc[0] - scroll[0], self.loc[1] - scroll[1]))
 
     def get_rect(self):
         return pygame.Rect(self.loc[0], self.loc[1], 16, 16)
@@ -228,19 +181,79 @@ background_objects = [[0.25, [120, 40, 70, 400]], [0.25, [280, 50, 70, 400]], [
 
 
 
+while (main_menu == True):
 
+    for ev in pygame.event.get():
+
+        if ev.type == pygame.QUIT:
+            pygame.quit()
+
+        # checks if a mouse is clicked
+        if ev.type == pygame.MOUSEBUTTONDOWN:
+
+            # if the mouse is clicked on the
+            # button the game is run
+            if WINDOW_SIZEX/2 - 90 <= mouse[0] <= WINDOW_SIZEX/2+104 and WINDOW_SIZEY/2 <= mouse[1] <= WINDOW_SIZEY/2+82:
+                gameloopmap1 = True
+                main_menu = False
+                
+            if WINDOW_SIZEX/2 - 90 <= mouse[0] <= WINDOW_SIZEX/2+104 and WINDOW_SIZEY/2 + 100 <= mouse[1] <= WINDOW_SIZEY/2+182:
+                print("button 2 pressed")
+                
+        if ev.type == pygame.KEYDOWN:
+            gameloopmap1 = True
+            main_menu = False
+
+    # fills the screen with a color
+    display.fill((60, 25, 60))
+
+    # stores the (x,y) coordinates into
+    # the variable as a tuple
+    mouse = pygame.mouse.get_pos()
+    
+    # if mouse is hovered on a button it
+    # changes to lighter shade
+    if WINDOW_SIZEX/2 - 90 <= mouse[0] <= WINDOW_SIZEX/2+104 and WINDOW_SIZEY/2 <= mouse[1] <= WINDOW_SIZEY/2+82:
+        pygame.draw.rect(display, (70, 35, 70), [
+                         rendx/2 - 28, rendy/2 + 7, 63, 20])
+
+    else:
+        pygame.draw.rect(display, (50, 15, 50), [
+                         rendx/2 - 28, rendy/2 + 7, 62, 20])
+    
+    #making another button below the first one
+    if WINDOW_SIZEX/2 - 90 <= mouse[0] <= WINDOW_SIZEX/2+104 and WINDOW_SIZEY/2 + 100 <= mouse[1] <= WINDOW_SIZEY/2+182:
+        pygame.draw.rect(display, (70, 35, 70), [
+                         rendx/2 - 28, rendy/2 + 37, 63, 20]) 
+    
+    else:
+        pygame.draw.rect(display, (50, 15, 50), [
+                         rendx/2 - 28, rendy/2 + 37, 62, 20])
+    
+    
+    my_font.render(display, 'Any key to start', (rendx/2 - 150, 60))
+    my_big_font.render(display, 'Python Demo', (rendx/2 - 150, 40))
+    my_big_font.render(display, 'Start', (rendx/2 - 13, 141))
+
+    # updates the frames of the game
+    screen.blit(pygame.transform.scale(
+        display, (WINDOW_SIZEX, WINDOW_SIZEY)), (0, 0))
+
+    pygame.display.update()
 
 def render_HUD():
     # HUD
     my_big_font.render(display, (str(player2.score) + " " +
                        str(player.score)), (rendx/2 - 12, 5))
-    pygame.draw.rect(display, (112, 0, 0), [rendx/2 - 120, 20, 1 * P1fireballTimer - 10, 10])
-    pygame.draw.rect(display, (0, 0, 112), [rendx/2 + 24, 20, 1 * P2fireballTimer - 10, 10])#outer rects
     
-    pygame.draw.rect(display, (102, 0, 0), [rendx/2 - 120, 15, 1 * P1fireballTimer - 10, 10])#innet rects
-    pygame.draw.rect(display, (0, 0, 102), [rendx/2 + 24, 15, 1 * P2fireballTimer - 10, 10])
-    #my_big_font.render(display, ("PWR" + str(P1fireballTimer)), (rendx/2 - 40, 20))
-    #my_big_font.render(display, ("PWR" + str(P2fireballTimer)), (rendx/2 + 15, 20))
+    pygame.draw.rect(display, (150, 0, 0), [rendx/2 - 120, 20, 1 * P1fireballTimer - 10, 10])#innet rects
+    pygame.draw.rect(display, (0, 0, 150), [rendx/2 + 24, 20, 1 * P2fireballTimer - 10, 10])
+
+    pygame.draw.rect(display, (200,200,200), [rendx/2 - 120, 20, 90, 10], 1, 13)
+    pygame.draw.rect(display, (200,200,200), [rendx/2 + 24, 20, 90, 10], 1, 13)#outer rects
+    
+    pygame.draw.rect(display, (255,255,255), [rendx/2 - 120, 20, 90, 10], 1)#innet rects
+    pygame.draw.rect(display, (255,255,255), [rendx/2 + 24, 20, 90, 10], 1)
 
 def redrawGameWindow():
     render_HUD()
@@ -307,15 +320,15 @@ def gamewin(p1, p2):
 
         pygame.display.update()
 
-while ((gameloop == True) or (try_again == True)):  # GENREAL GAME LOOP
+while ((gameloopmap1 == True) or (try_again == True)):  # GENREAL GAME LOOP
     # winlogic
     if player.score == 3:
         gamewin(player.score, player2.score)
-        gameloop = False
+        gameloopmap1 = False
 
     if player2.score == 3:
         gamewin(player.score, player2.score)
-        gameloop = False
+        gameloopmap1 = False
 
     display.fill((175, 175, 175))  # clear screen by filling it with gray
 
@@ -424,9 +437,9 @@ while ((gameloop == True) or (try_again == True)):  # GENREAL GAME LOOP
     fireball_movement = [0, 0]
     for entity in P1fireball_list:
         if (entity.flip == False):
-            fireball_movement[0] += 2
+            fireball_movement[0] += 1
         if (entity.flip == True):
-            fireball_movement[0] -= 2
+            fireball_movement[0] -= 1
         fireball_movement[1] += entity.vertical_momentum
         entity.vertical_momentum += 0.01
         if entity.vertical_momentum > 3:
@@ -435,9 +448,9 @@ while ((gameloop == True) or (try_again == True)):  # GENREAL GAME LOOP
     p2fireball_movement = [0, 0]
     for entity in P2fireball_list:
         if (entity.flip == False):
-            p2fireball_movement[0] += 2
+            p2fireball_movement[0] += 1
         if (entity.flip == True):
-            p2fireball_movement[0] -= 2
+            p2fireball_movement[0] -= 1
         p2fireball_movement[1] += entity.vertical_momentum
         entity.vertical_momentum += 0.01
         if entity.vertical_momentum > 3:
@@ -499,13 +512,17 @@ while ((gameloop == True) or (try_again == True)):  # GENREAL GAME LOOP
         P2fireballTimer = 0
     if P1fireballTimer < 0:
         P1fireballTimer = 0
-    
+    if P2fireballTimer > 100:
+        P2fireballTimer = 100
+    if P1fireballTimer > 100:
+        P1fireballTimer = 100
+        
     
     #FIREBALL LENGTH
     #Player collision fo the fireball entity
     for entity in P1fireball_list:
         pygame.draw.aaline(display, (180, 50, 50), (player.x - scroll[0] + 5, player.y - scroll[1] + 5), (entity.obj.x - scroll[0] , entity.obj.y - scroll[1] + 5))
-        P1Fballparticles.append([[entity.obj.x - scroll[0] + 2, entity.obj.y - scroll[1] + 5], [random.randint(0, 20) / 10 - 1, -1], random.randint(4, 10)])
+        P1Fballparticles.append([[entity.obj.x - scroll[0] + 2, entity.obj.y - scroll[1] + 10], [random.randint(0, 20) / 10 - 1, -1], random.randint(4, 10)])
         
         if player2.collision_test(entity.obj.rect):
             
@@ -514,6 +531,7 @@ while ((gameloop == True) or (try_again == True)):  # GENREAL GAME LOOP
                 player2_movement[0] -= 2
             else:
                 player2_movement[0] += 2
+        
         entity.move(fireball_movement, tile_rects)
         if (entity.obj.block_hit == True):
             P1fireball_list.remove(entity)
@@ -527,7 +545,7 @@ while ((gameloop == True) or (try_again == True)):  # GENREAL GAME LOOP
     
     for entity in P2fireball_list:
         pygame.draw.aaline(display, (120, 50, 120), (player2.x - scroll[0] + 5, player2.y - scroll[1] + 5), (entity.obj.x - scroll[0] , entity.obj.y - scroll[1] + 5))
-        P2Fballparticles.append([[entity.obj.x - scroll[0], entity.obj.y - scroll[1] + 5], [random.randint(0, 20) / 10 - 1, -1], random.randint(4, 10)])
+        P2Fballparticles.append([[entity.obj.x - scroll[0], entity.obj.y - scroll[1] + 10], [random.randint(0, 20) / 10 - 1, -1], random.randint(4, 10)])
         if player.collision_test(entity.obj.rect):
             player.tripleJumpCount = 0
             if (entity.flip == True):
@@ -549,10 +567,10 @@ while ((gameloop == True) or (try_again == True)):  # GENREAL GAME LOOP
         particle[0][1] += particle[1][1]
         particle[2] -= 0.1
         particle[1][1] += 0.15
-        pygame.draw.circle(display, (255, 100, 100), [int(particle[0][0]), int(particle[0][1])], int(particle[2]))
+        pygame.draw.circle(display, (220, 100, 100), [int(particle[0][0]), int(particle[0][1])], int(particle[2]))
 
         radius = particle[2] * 2
-        display.blit(circle_surf(radius, (80, 20, 60)), (int(particle[0][0] - radius), int(particle[0][1] - radius)), special_flags=BLEND_RGB_ADD)
+        display.blit(circle_surf(radius, (60, 20, 30)), (int(particle[0][0] - radius), int(particle[0][1] - radius)), special_flags=BLEND_RGB_ADD)
 
         if particle[2] <= 0:
             P1Fballparticles.remove(particle)
@@ -562,7 +580,7 @@ while ((gameloop == True) or (try_again == True)):  # GENREAL GAME LOOP
         particle[0][1] += particle[1][1]
         particle[2] -= 0.1
         particle[1][1] += 0.15
-        pygame.draw.circle(display, (100, 100, 255), [int(particle[0][0]), int(particle[0][1])], int(particle[2]))
+        pygame.draw.circle(display, (100, 100, 220), [int(particle[0][0]), int(particle[0][1])], int(particle[2]))
 
         radius = particle[2] * 2
         display.blit(circle_surf(radius, (60, 20, 80)), (int(particle[0][0] - radius), int(particle[0][1] - radius)), special_flags=BLEND_RGB_ADD)
@@ -584,25 +602,25 @@ while ((gameloop == True) or (try_again == True)):  # GENREAL GAME LOOP
 
     # Melee check flip animation
 
-    if (player_movement[0] > 0) and (player.ismelee == True) and (P1fireballTimer != 0):
+    if (player_movement[0] > 0) and (player.ismelee == True) and (P1fireballTimer != 0) and (player.cancrouch == False):
         P1fireball_list.append(
             e.entity(player.x - 4, player.y - 10, 16, 9, 'fireball', False))
 
         P1fireballTimer -= 1
         player.set_flip(False)
 
-    if (player_movement[0] < 0) and (player.ismelee == True) and (P1fireballTimer != 0):
+    if (player_movement[0] < 0) and (player.ismelee == True) and (P1fireballTimer != 0) and (player.cancrouch == False):
         P1fireball_list.append(
             e.entity(player.x - 5, player.y - 10, 16, 9, 'fireball', True))
         P1fireballTimer -= 1
         player.set_flip(True)
 
-    if (player_movement[0] == 0) and (player.ismelee == True) and (player.flip == True) and (P1fireballTimer != 0):
+    if (player_movement[0] == 0) and (player.ismelee == True) and (player.flip == True) and (P1fireballTimer != 0) and (player.cancrouch == False):
         P1fireball_list.append(
             e.entity(player.x - 5, player.y - 10, 16, 9, 'fireball', True))
         P1fireballTimer -= 1
 
-    if (player_movement[0] == 0) and (player.ismelee == True) and (player.flip == False) and (P1fireballTimer != 0):
+    if (player_movement[0] == 0) and (player.ismelee == True) and (player.flip == False) and (P1fireballTimer != 0) and (player.cancrouch == False):
         P1fireball_list.append(
             e.entity(player.x - 4, player.y - 10, 16, 9, 'fireball', False))
         P1fireballTimer -= 1
@@ -624,24 +642,24 @@ while ((gameloop == True) or (try_again == True)):  # GENREAL GAME LOOP
 
     # PLAYER 2 ANIMATION CHECKS        ########################################################
 
-    if (player2_movement[0] > 0) and (player2.ismelee == True) and (P2fireballTimer != 0):
+    if (player2_movement[0] > 0) and (player2.ismelee == True) and (P2fireballTimer != 0) and (player2.cancrouch == False):
         P2fireball_list.append(
             e.entity(player2.x - 4, player2.y - 12, 16, 9, 'p2fireball', False))
         P2fireballTimer -= 1
         player2.set_flip(False)
 
-    if (player2_movement[0] < 0) and (player2.ismelee == True) and (P2fireballTimer != 0):
+    if (player2_movement[0] < 0) and (player2.ismelee == True) and (P2fireballTimer != 0) and (player2.cancrouch == False):
         P2fireball_list.append(
             e.entity(player2.x - 5, player2.y - 12, 16, 9, 'p2fireball', True))
         P2fireballTimer -=1
         player2.set_flip(True)
 
-    if (player2_movement[0] == 0) and (player2.ismelee == True) and (player2.flip == True) and (P2fireballTimer != 0):
+    if (player2_movement[0] == 0) and (player2.ismelee == True) and (player2.flip == True) and (P2fireballTimer != 0) and (player2.cancrouch == False):
         P2fireball_list.append(
             e.entity(player2.x - 5, player2.y - 12, 16, 9, 'p2fireball', True))
         P2fireballTimer -=1
 
-    if (player2_movement[0] == 0) and (player2.ismelee == True) and (player2.flip == False) and (P2fireballTimer != 0):
+    if (player2_movement[0] == 0) and (player2.ismelee == True) and (player2.flip == False) and (P2fireballTimer != 0) and (player2.cancrouch == False):
         P2fireball_list.append(
             e.entity(player2.x - 4, player2.y - 12, 16, 9, 'p2fireball', False))
         P2fireballTimer -=1
