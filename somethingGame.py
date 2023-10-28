@@ -6,8 +6,8 @@ clock = pygame.time.Clock()
 pygame.init()  # initiates pygame
 
 #CHANGETEXT
-# caption shit 
-captionlistfilepath = 'titlelist'
+# caption 
+captionlistfilepath = './titlelist'
 
 def load_captionlist(captionlistfilepath):
     titlelistcount = -1 
@@ -24,6 +24,7 @@ def load_captionlist(captionlistfilepath):
 
 (captionlist, titlelistcount) = load_captionlist(captionlistfilepath)
 pygame.display.set_caption(captionlist[randint(-1, titlelistcount)])
+
 
 
 # window caption
@@ -43,7 +44,7 @@ display = pygame.Surface((rendx, rendy))
 
 # map load general filepaths
 def load_map(path):
-    f = open(path + '.txt', 'r')
+    f = open(path + '.txt')
     data = f.read()
     f.close()
     data = data.split('\n')
@@ -55,8 +56,8 @@ def load_map(path):
 
 # Loading map, filepaths for animations
 e.load_animations('data/images/entities/')
-game_map = load_map('data\maps\map')
-game_map1 = load_map('data\maps\map1')
+game_map = load_map('data/maps/map')
+game_map1 = load_map('data/maps/map1')
 grass_img = pygame.image.load('data/images/grass.png')
 dirt_img = pygame.image.load('data/images/dirt.png')
 jumper_img = pygame.image.load('data/images/jumppad.png')
@@ -175,7 +176,7 @@ P2fireballTimer = 100
 
 
 
-# PARALLAX RECTANGLE SHIT
+# PARALLAX RECTANGLE 
 background_objects = [[0.25, [120, 40, 70, 400]], [0.25, [280, 50, 70, 400]], [
     0.5, [30, 70, 40, 400]], [0.5, [130, 120, 100, 400]], [0.5, [300, 110, 120, 400]]]
 
@@ -222,17 +223,17 @@ while (main_menu == True):
                          rendx/2 - 28, rendy/2 + 7, 62, 20])
     
     #making another button below the first one
-    if WINDOW_SIZEX/2 - 90 <= mouse[0] <= WINDOW_SIZEX/2+104 and WINDOW_SIZEY/2 + 100 <= mouse[1] <= WINDOW_SIZEY/2+182:
-        pygame.draw.rect(display, (70, 35, 70), [
-                         rendx/2 - 28, rendy/2 + 37, 63, 20]) 
+    # if WINDOW_SIZEX/2 - 90 <= mouse[0] <= WINDOW_SIZEX/2+104 and WINDOW_SIZEY/2 + 100 <= mouse[1] <= WINDOW_SIZEY/2+182:
+    #     pygame.draw.rect(display, (70, 35, 70), [
+    #                      rendx/2 - 28, rendy/2 + 37, 63, 20]) 
     
-    else:
-        pygame.draw.rect(display, (50, 15, 50), [
-                         rendx/2 - 28, rendy/2 + 37, 62, 20])
+    # else:
+    #     pygame.draw.rect(display, (50, 15, 50), [
+    #                      rendx/2 - 28, rendy/2 + 37, 62, 20])
     
     
     my_font.render(display, 'Any key to start', (rendx/2 - 150, 60))
-    my_big_font.render(display, 'Python Demo', (rendx/2 - 150, 40))
+    my_big_font.render(display, 'Something Game', (rendx/2 - 150, 40))
     my_big_font.render(display, 'Start', (rendx/2 - 13, 141))
 
     # updates the frames of the game
@@ -337,7 +338,7 @@ while ((gameloopmap1 == True) or (try_again == True)):  # GENREAL GAME LOOP
     zoomx = 0
     zoomy = 0
     
-    # FUCKING ANNOYING CAMERA SCROLLING
+    # ANNOYING CAMERA SCROLLING
     true_scroll[0] += (midpointx - true_scroll[0] - rendx/2)/18
     true_scroll[1] += (midpointy - true_scroll[1] - rendy/2)/18
 
